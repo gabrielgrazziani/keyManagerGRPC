@@ -8,13 +8,28 @@ option objc_class_prefix = "HLW";
 package br.com.zup.academy;
 
 service KeyManagerGRPCService {
-  rpc send (KeyManagerGRPCRequest) returns (KeyManagerGRPCReply) {}
+  rpc cadastro (ChavePixRequest) returns (ChavePixResponse) {}
 }
 
-message KeyManagerGRPCRequest {
-  string name = 1;
+message ChavePixRequest {
+  enum TipoChave{
+    CPF = 0;
+    TELEFONE_CELULAR = 1;
+    EMAIL = 2;
+    CHAVE_ALEATORIA = 3;
+  }
+
+  enum TipoConta{
+    CONTA_CORRENTE = 0;
+    CONTA_POUPANCA = 1;
+  }
+
+  string idTitular = 1;
+  TipoChave tipoChave  = 2;
+  string chave = 3;
+  TipoConta tipoConta = 4;
 }
 
-message KeyManagerGRPCReply {
-  string message = 1;
+message ChavePixResponse {
+  string id = 1;
 }
