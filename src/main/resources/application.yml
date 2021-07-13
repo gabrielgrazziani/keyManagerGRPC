@@ -1,0 +1,11 @@
+micronaut:
+  application:
+    name: keyManagerGRPC
+datasources:
+  default:
+    url: jdbc:postgresql://localhost:5432/key_manager_db
+  driverClassName: org.postgresql.Driver
+  username: ${DB_USERNAME:zup}
+  password: ${DB_PASSWORD:zuper}
+  dialect: POSTGRES
+jpa.default.properties.hibernate.hbm2ddl.auto: update
