@@ -8,13 +8,11 @@ import io.grpc.stub.StreamObserver
 import io.micronaut.http.HttpStatus
 import java.util.*
 import javax.inject.Singleton
-import javax.validation.Validator
 
 @Singleton
 class CadastroChavePixController(
     val repository: ChavePixRepository,
-    val erpItau: ErpItau,
-    val validator: Validator
+    val erpItau: ErpItau
 ): KeyManagerGRPCServiceGrpc.KeyManagerGRPCServiceImplBase() {
 
     override fun cadastro(request: ChavePixRequest, responseObserver: StreamObserver<ChavePixResponse>) {
@@ -39,10 +37,6 @@ class CadastroChavePixController(
         if(resposta.status.code == HttpStatus.NOT_FOUND.code){
             responseObserver.onError(Status.NOT_FOUND
                 .withDescription("idTitilar e/ou tipoConta esta incorreto")
-                .asRuntimeException())
-            return
-        }else if(resposta.status.code != HttpStatus.OK.code){
-            responseObserver.onError(Status.INTERNAL
                 .asRuntimeException())
             return
         }

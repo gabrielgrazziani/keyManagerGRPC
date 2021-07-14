@@ -1,4 +1,7 @@
 datasources:
   default:
-    url: jdbc:tc:postgresql:12:///postgres
-    driverClassName: org.testcontainers.jdbc.ContainerDatabaseDriver
+    url: jdbc:h2:mem:testeDb;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE
+    driverClassName: org.h2.Driver
+
+jpa.default.properties.hibernate.show_sql: true
+jpa.default.properties.hibernate.format_sql: true

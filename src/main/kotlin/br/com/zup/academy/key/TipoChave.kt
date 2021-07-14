@@ -9,7 +9,7 @@ enum class TipoChave: ValidadoFomatoChavePix, TransformadorChavePix {
             if (chave.matches("^[0-9]{11}\$".toRegex())) {
                 return ErroNaValidacao(false)
             } else {
-                return ErroNaValidacao(true, "Não e um CPF valido")
+                return ErroNaValidacao(true, "Não e um CPF valido ou esta mal formatado")
             }
         }
         override fun transformar(chave: String) = chave
