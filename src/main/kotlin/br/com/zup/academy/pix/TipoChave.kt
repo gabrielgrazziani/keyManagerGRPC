@@ -1,12 +1,18 @@
 package br.com.zup.academy.pix
 
-import br.com.zup.academy.ChavePixRequest
+import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator
+import org.hibernate.validator.internal.constraintvalidators.hv.br.CPFValidator
 import java.util.*
 
-enum class TipoChave: ValidadoFomatoChavePix, TransformadorChavePix {
+enum class TipoChave {
     CPF {
         override fun validarFormatoChave(chave: String): ErroNaValidacao {
-            if (chave.matches("^[0-9]{11}\$".toRegex())) {
+            val valido = CPFValidator().run {
+                initialize(null)
+                isValid(chave, null)
+            }
+
+            if (valido && chave.matches("^[0-9]{11}\$".toRegex())) {
                 return ErroNaValidacao(false)
             } else {
                 return ErroNaValidacao(true, "Não e um CPF valido ou esta mal formatado")
@@ -25,13 +31,18 @@ enum class TipoChave: ValidadoFomatoChavePix, TransformadorChavePix {
         override fun transformar(chave: String) = chave
     },
     EMAIL {
-        override fun validarFormatoChave(chave: String) =
-            if (chave.matches("^[a-z0-9.]+@[a-z0-9]+\\.[a-z]+(\\.[a-z]+)?\$".toRegex())) {
+        override fun validarFormatoChave(chave: String): ErroNaValidacao {
+            val valido = EmailValidator().run {
+                initialize(null)
+                isValid(chave, null)
+            }
+
+            return if (valido) {
                 ErroNaValidacao(false)
             } else {
                 ErroNaValidacao(true, "Não e um Email valido")
             }
-
+        }
         override fun transformar(chave: String) = chave
     },
     CHAVE_ALEATORIA {
@@ -45,20 +56,6 @@ enum class TipoChave: ValidadoFomatoChavePix, TransformadorChavePix {
         override fun transformar(chave: String) = UUID.randomUUID().toString()
     };
 
-}
-
-interface ValidadoFomatoChavePix{
-    fun validarFormatoChave(chave: String): ErroNaValidacao
-}
-
-interface TransformadorChavePix{
-    fun transformar(chave: String): String
-}
-
-fun ChavePixRequest.TipoChave.map(): TipoChave? {
-    return try {
-        TipoChave.valueOf(this.name)
-    }catch (e: IllegalArgumentException){
-        null
-    }
+    abstract fun transformar(chave: String): String;
+    abstract fun validarFormatoChave(chave: String): ErroNaValidacao
 }

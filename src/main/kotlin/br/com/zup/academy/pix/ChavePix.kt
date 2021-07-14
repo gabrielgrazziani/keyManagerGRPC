@@ -5,11 +5,11 @@ import javax.persistence.*
 
 @Entity
 class ChavePix(
-    @Column(length = 16) val idTitilar: UUID,
-    @Enumerated(EnumType.STRING) val tipoChave: TipoChave,
-    @Enumerated(EnumType.STRING) val tipoConta: TipoConta,
-    @Column(length = 77) val chave: String,
-    @Column(length = 16) val uuid: UUID = UUID.randomUUID()
+    @field:Column(length = 16) val idTitilar: UUID,
+    @field:Enumerated(EnumType.STRING) val tipoChave: TipoChave,
+    @field:Enumerated(EnumType.STRING) val tipoConta: TipoConta,
+    @field:Column(length = 77) val chave: String,
+    @field:Column(length = 16) val uuid: UUID = UUID.randomUUID()
 ) {
 
     @Id

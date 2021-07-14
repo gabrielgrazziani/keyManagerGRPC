@@ -1,7 +1,6 @@
 package br.com.zup.academy.pix
 
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 internal class ValidarFormatoChaveTest{
@@ -27,7 +26,6 @@ internal class ValidarFormatoChaveTest{
     }
 
     @Test
-    @Disabled
     internal fun `deve invalidar uma chave do tipo CPF invalido`() {
         val cpfMalFormatado = "19845561005"
         val tipoChave = TipoChave.CPF

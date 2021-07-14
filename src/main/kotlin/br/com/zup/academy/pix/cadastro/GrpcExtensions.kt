@@ -7,8 +7,25 @@ import java.util.*
 fun ChavePixRequest.paraChavePixForm(): ChavePixForm {
     return ChavePixForm(
         idTitilar = UUID.fromString(idTitular),
-        tipoChave = tipoChave.map(),
-        tipoConta = tipoConta.map(),
+        tipoChave = tipoChave.paraTipoChave(),
+        tipoConta = tipoConta.paraTipoConta(),
         chave = chave
     )
+}
+
+fun ChavePixRequest.TipoConta.paraTipoConta(): TipoConta? {
+    return try {
+        TipoConta.valueOf(this.name)
+    }catch (e: IllegalArgumentException){
+        null
+    }
+}
+
+
+fun ChavePixRequest.TipoChave.paraTipoChave(): TipoChave? {
+    return try {
+        TipoChave.valueOf(this.name)
+    }catch (e: IllegalArgumentException){
+        null
+    }
 }
