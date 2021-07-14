@@ -1,4 +1,4 @@
-package br.com.zup.academy.key
+package br.com.zup.academy.pix
 
 import io.micronaut.data.annotation.Repository
 import io.micronaut.data.repository.CrudRepository

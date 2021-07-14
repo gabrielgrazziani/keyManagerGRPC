@@ -1,4 +1,4 @@
-package br.com.zup.academy.key
+package br.com.zup.academy.pix
 
 import java.util.*
 import javax.persistence.*

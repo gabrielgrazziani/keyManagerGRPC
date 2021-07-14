@@ -1,4 +1,4 @@
-package br.com.zup.academy.key
+package br.com.zup.academy.pix
 
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Get

@@ -1,4 +1,4 @@
-package br.com.zup.academy.key
+package br.com.zup.academy.pix
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals

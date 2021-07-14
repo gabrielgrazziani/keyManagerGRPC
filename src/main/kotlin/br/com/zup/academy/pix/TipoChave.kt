@@ -1,4 +1,4 @@
-package br.com.zup.academy.key
+package br.com.zup.academy.pix
 
 import br.com.zup.academy.ChavePixRequest
 import java.util.*
@@ -55,12 +55,10 @@ interface TransformadorChavePix{
     fun transformar(chave: String): String
 }
 
-fun ChavePixRequest.TipoChave.map(): TipoChave {
-    return when(this){
-        ChavePixRequest.TipoChave.CPF -> TipoChave.CPF
-        ChavePixRequest.TipoChave.EMAIL -> TipoChave.EMAIL
-        ChavePixRequest.TipoChave.TELEFONE_CELULAR -> TipoChave.TELEFONE_CELULAR
-        ChavePixRequest.TipoChave.CHAVE_ALEATORIA -> TipoChave.CHAVE_ALEATORIA
-        else -> throw IllegalStateException("Tipo ${this.javaClass.simpleName}  não suportado")
+fun ChavePixRequest.TipoChave.map(): TipoChave? {
+    return try {
+        TipoChave.valueOf(this.name)
+    }catch (e: IllegalArgumentException){
+        null
     }
 }
