@@ -5,11 +5,11 @@ import java.util.*
 
 enum class TipoChave: ValidadoFomatoChavePix, TransformadorChavePix {
     CPF {
-        override fun validarFormatoChave(chave: String) {
+        override fun validarFormatoChave(chave: String): ErroNaValidacao {
             if (chave.matches("^[0-9]{11}\$".toRegex())) {
-                ErroNaValidacao(false)
+                return ErroNaValidacao(false)
             } else {
-                ErroNaValidacao(true, "Não e um CPF valido")
+                return ErroNaValidacao(true, "Não e um CPF valido")
             }
         }
         override fun transformar(chave: String) = chave
