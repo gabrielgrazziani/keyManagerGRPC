@@ -109,6 +109,7 @@ internal class CadastroChavePixControllerTest(
 
         assertEquals(Status.INVALID_ARGUMENT.code,error.status.code)
         assertEquals("INVALID_ARGUMENT: Para criar uma chave aleatoria o campo 'chave' deve estar em branco",error.message)
+        assertEquals(0,repository.count())
     }
 
     @Test
@@ -135,6 +136,7 @@ internal class CadastroChavePixControllerTest(
 
         assertEquals(Status.ALREADY_EXISTS.code,error.status.code)
         assertEquals("ALREADY_EXISTS: ja existe uma chave com este valor",error.message)
+        assertEquals(1,repository.count())
     }
 
     @Test
@@ -155,6 +157,7 @@ internal class CadastroChavePixControllerTest(
 
         assertEquals(Status.NOT_FOUND.code,error.status.code)
         assertEquals("NOT_FOUND: idTitilar e/ou tipoConta esta incorreto",error.message)
+        assertEquals(0,repository.count())
     }
 
     fun String.toUUID() = UUID.fromString(this)
