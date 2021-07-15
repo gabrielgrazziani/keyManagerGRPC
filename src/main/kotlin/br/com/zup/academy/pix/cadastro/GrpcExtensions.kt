@@ -2,11 +2,10 @@ package br.com.zup.academy.pix
 
 import br.com.zup.academy.ChavePixRequest
 import br.com.zup.academy.pix.cadastro.ChavePixForm
-import java.util.*
 
 fun ChavePixRequest.paraChavePixForm(): ChavePixForm {
     return ChavePixForm(
-        idTitular = UUID.fromString(idTitular),
+        idTitular = idTitular,
         tipoChave = tipoChave.paraTipoChave(),
         tipoConta = tipoConta.paraTipoConta(),
         chave = chave

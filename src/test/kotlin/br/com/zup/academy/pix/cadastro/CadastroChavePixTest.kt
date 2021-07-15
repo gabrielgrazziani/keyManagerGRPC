@@ -3,11 +3,10 @@ package br.com.zup.academy.pix.cadastro
 import br.com.zup.academy.ChavePixRequest
 import br.com.zup.academy.KeyManagerGRPCServiceGrpc
 import br.com.zup.academy.pix.*
-import com.google.rpc.BadRequest
+import br.com.zup.academy.util.getViolacao
 import io.grpc.ManagedChannel
 import io.grpc.Status
 import io.grpc.StatusRuntimeException
-import io.grpc.protobuf.StatusProto
 import io.micronaut.context.annotation.Factory
 import io.micronaut.context.annotation.Replaces
 import io.micronaut.grpc.annotation.GrpcChannel
@@ -162,12 +161,6 @@ internal class CadastroChavePixTest(
         assertEquals(Status.INVALID_ARGUMENT.code,error.status.code)
         assertEquals("INVALID_ARGUMENT: idTitilar e/ou tipoConta esta incorreto",error.message)
         assertEquals(0,repository.count())
-    }
-
-    fun StatusRuntimeException.getViolacao(index: Int): BadRequest.FieldViolation? {
-        val statusProto = StatusProto.fromThrowable(this)
-        val badRequest = statusProto?.detailsList?.get(0)?.unpack(BadRequest::class.java)
-        return badRequest?.getFieldViolations(index);
     }
 
     @Factory

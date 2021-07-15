@@ -2,7 +2,6 @@ package br.com.zup.academy.pix.remover
 
 import br.com.zup.academy.KeymanagerRemoveGrpcServiceGrpc
 import br.com.zup.academy.RemoveChavePixRequest
-import br.com.zup.academy.pix.toUUID
 import br.com.zup.academy.shared.grpc.ErrorHandler
 import com.google.protobuf.Empty
 import io.grpc.stub.StreamObserver
@@ -23,7 +22,7 @@ class RemoveChavePixGrpc(
 
 fun RemoveChavePixRequest.paraRemoveChavePixForm(): RemoveChavePixForm{
     return RemoveChavePixForm(
-        idPix = idPix.toUUID(),
-        idTitular = idTitular.toUUID()
+        idPix = idPix,
+        idTitular = idTitular
     )
 }

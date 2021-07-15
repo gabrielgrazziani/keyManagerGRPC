@@ -6,6 +6,7 @@ import br.com.zup.academy.pix.ChavePix
 import br.com.zup.academy.pix.ChavePixRepository
 import br.com.zup.academy.pix.TipoChave
 import br.com.zup.academy.pix.TipoConta
+import br.com.zup.academy.util.getViolacao
 import io.grpc.ManagedChannel
 import io.grpc.Status
 import io.grpc.StatusRuntimeException
@@ -75,6 +76,22 @@ internal class RemoveChavePixTest(
 
         assertEquals(Status.INVALID_ARGUMENT.code,error.status.code)
         assertTrue(error.message!!.endsWith("A chave pode ser removida somente pelo seu dono"))
+    }
+
+    @Test
+    internal fun `nao deve remover chave pix se o id nao for o UUID valido`() {
+        repository.save(novaChavePix())
+
+        val error = assertThrows<StatusRuntimeException> {
+            grpc.remove(RemoveChavePixRequest.newBuilder()
+                .setIdPix(idPix.toString())
+                .setIdTitular("312-123-132")
+                .build())
+        }
+
+        assertEquals(Status.INVALID_ARGUMENT.code,error.status.code)
+        val violation = error.getViolacao(0)
+        assertEquals("UUID invalido",violation?.description)
     }
 
     fun novaChavePix() = ChavePix(

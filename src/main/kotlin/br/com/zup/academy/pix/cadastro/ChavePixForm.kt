@@ -3,14 +3,14 @@ package br.com.zup.academy.pix.cadastro
 import br.com.zup.academy.pix.*
 import io.micronaut.core.annotation.Introspected
 import io.micronaut.core.annotation.NonNull
-import java.util.*
 import javax.validation.constraints.Size
 
 @ValidKeyPix
 @Introspected
 data class ChavePixForm(
     @field:NonNull
-    val idTitular: UUID,
+    @field:UUIDValido
+    val idTitular: String?,
     @field:NonNull
     val tipoChave: TipoChave?,
     @field:NonNull
@@ -20,13 +20,9 @@ data class ChavePixForm(
     val chave: String? = ""
 ){
 
-    fun validar(): ErroNaValidacao {
-        return  tipoChave!!.validarFormatoChave(chave!!)
-    }
-
     fun paraChavePix(): ChavePix {
         return ChavePix(
-            idTitular = idTitular!!,
+            idTitular = idTitular!!.toUUID(),
             tipoChave = tipoChave!!,
             tipoConta = tipoConta!!,
             chave = tipoChave.transformar(chave!!)
