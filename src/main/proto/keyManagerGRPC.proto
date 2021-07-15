@@ -7,6 +7,8 @@ option objc_class_prefix = "HLW";
 
 package br.com.zup.academy;
 
+import "google/protobuf/empty.proto";
+
 service KeyManagerGRPCService {
   rpc cadastro (ChavePixRequest) returns (ChavePixResponse) {}
 }
@@ -32,4 +34,13 @@ message ChavePixRequest {
 
 message ChavePixResponse {
   string id = 1;
+}
+
+service KeymanagerRemoveGrpcService  {
+  rpc remove (RemoveChavePixRequest) returns (google.protobuf.Empty) {}
+}
+
+message RemoveChavePixRequest {
+  string idPix = 1;
+  string idTitular     = 2;
 }

@@ -6,7 +6,7 @@ import java.util.*
 
 fun ChavePixRequest.paraChavePixForm(): ChavePixForm {
     return ChavePixForm(
-        idTitilar = UUID.fromString(idTitular),
+        idTitular = UUID.fromString(idTitular),
         tipoChave = tipoChave.paraTipoChave(),
         tipoConta = tipoConta.paraTipoConta(),
         chave = chave

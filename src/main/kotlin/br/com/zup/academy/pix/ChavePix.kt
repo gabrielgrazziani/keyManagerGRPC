@@ -5,7 +5,7 @@ import javax.persistence.*
 
 @Entity
 class ChavePix(
-    @field:Column(length = 16) val idTitilar: UUID,
+    @field:Column(length = 16) val idTitular: UUID,
     @field:Enumerated(EnumType.STRING) val tipoChave: TipoChave,
     @field:Enumerated(EnumType.STRING) val tipoConta: TipoConta,
     @field:Column(length = 77) val chave: String,

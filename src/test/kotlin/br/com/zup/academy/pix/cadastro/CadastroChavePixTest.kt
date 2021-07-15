@@ -125,7 +125,7 @@ internal class CadastroChavePixTest(
         repository.save(ChavePix(
             tipoChave = TipoChave.EMAIL,
             tipoConta = TipoConta.CONTA_POUPANCA,
-            idTitilar = idTitular.toUUID(),
+            idTitular = idTitular.toUUID(),
             chave = email
         ))
 

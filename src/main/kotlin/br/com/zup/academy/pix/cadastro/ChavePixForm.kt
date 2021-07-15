@@ -10,7 +10,7 @@ import javax.validation.constraints.Size
 @Introspected
 data class ChavePixForm(
     @field:NonNull
-    val idTitilar: UUID,
+    val idTitular: UUID,
     @field:NonNull
     val tipoChave: TipoChave?,
     @field:NonNull
@@ -26,7 +26,7 @@ data class ChavePixForm(
 
     fun paraChavePix(): ChavePix {
         return ChavePix(
-            idTitilar = idTitilar!!,
+            idTitular = idTitular!!,
             tipoChave = tipoChave!!,
             tipoConta = tipoConta!!,
             chave = tipoChave.transformar(chave!!)
