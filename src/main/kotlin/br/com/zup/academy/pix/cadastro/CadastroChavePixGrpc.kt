@@ -26,27 +26,3 @@ class CadastroChavePixGrpc(
         responseObserver.onCompleted()
     }
 }
-
-
-//        if(repository.existsByChave(chavePixForm.chave)){
-//            responseObserver.onError(Status.ALREADY_EXISTS
-//                .withDescription("ja existe uma chave com este valor")
-//                .asRuntimeException())
-//            return
-//        }
-//
-//        val erroValidacao = chavePixForm.validar()
-//        if(erroValidacao.posuiErro){
-//            responseObserver.onError(Status.INVALID_ARGUMENT
-//                .withDescription(erroValidacao.menssagem)
-//                .asRuntimeException())
-//            return
-//        }
-//
-//        val resposta = erpItau.buscarConta(chavePixForm.idTitilar,chavePixForm.tipoConta.name)
-//        if(resposta.status.code == HttpStatus.NOT_FOUND.code){
-//            responseObserver.onError(Status.NOT_FOUND
-//                .withDescription("idTitilar e/ou tipoConta esta incorreto")
-//                .asRuntimeException())
-//            return
-//        }
