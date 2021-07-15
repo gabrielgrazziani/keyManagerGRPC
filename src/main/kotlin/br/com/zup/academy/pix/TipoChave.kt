@@ -1,6 +1,5 @@
 package br.com.zup.academy.pix
 
-import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CPFValidator
 import java.util.*
 
@@ -32,12 +31,7 @@ enum class TipoChave {
     },
     EMAIL {
         override fun validarFormatoChave(chave: String): ErroNaValidacao {
-            val valido = EmailValidator().run {
-                initialize(null)
-                isValid(chave, null)
-            }
-
-            return if (valido) {
+            return if (chave.matches("^[a-z0-9.]+@[a-z0-9]+\\.[a-z]+(\\.[a-z]+)?\$".toRegex())) {
                 ErroNaValidacao(false)
             } else {
                 ErroNaValidacao(true, "Não e um Email valido")
