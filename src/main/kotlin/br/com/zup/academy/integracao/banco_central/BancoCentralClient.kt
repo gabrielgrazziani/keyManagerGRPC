@@ -17,10 +17,10 @@ interface BancoCentralClient{
     @Produces(MediaType.APPLICATION_XML)
     fun cria(@Body createPixKeyRequest: CreatePixKeyRequest): HttpResponse<CreatePixKeyResponse>
 
-    @Delete("pix/keys")
+    @Delete("pix/keys/{key}")
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
-    fun deleta(key: String ,@Body deletePixKey: DeletePixKeyRequest = DeletePixKeyRequest(key = key)): HttpResponse<Any>
+    fun deleta(@PathVariable key: String, @Body deletePixKey: DeletePixKeyRequest = DeletePixKeyRequest(key = key)): HttpResponse<Any>
 
 }
 
