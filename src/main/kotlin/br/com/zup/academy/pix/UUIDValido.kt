@@ -19,7 +19,7 @@ annotation class UUIDValido(
 @Singleton
 class UUIDValidator: javax.validation.ConstraintValidator<UUIDValido, String> {
 
-    override fun isValid(value: String, context: javax.validation.ConstraintValidatorContext): Boolean {
+    override fun isValid(value: String?, context: javax.validation.ConstraintValidatorContext): Boolean {
         if (value == null) {
             return true
         }

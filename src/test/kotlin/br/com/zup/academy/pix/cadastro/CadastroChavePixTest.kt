@@ -11,10 +11,10 @@ import io.grpc.ManagedChannel
 import io.grpc.Status
 import io.grpc.StatusRuntimeException
 import io.micronaut.context.annotation.Factory
-import io.micronaut.context.annotation.Replaces
 import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.grpc.server.GrpcServerChannel
 import io.micronaut.http.HttpResponse
+import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
@@ -22,15 +22,19 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito
 import java.util.*
+import javax.inject.Inject
 import javax.inject.Singleton
 
 @MicronautTest(transactional = false)
 internal class CadastroChavePixTest(
     val repository: ChavePixRepository,
-    val erpItau: ErpItau,
-    val bancoCentralClient: BancoCentralClient,
     val grpcService: KeyManagerGRPCServiceGrpc.KeyManagerGRPCServiceBlockingStub
 ) {
+
+    @Inject
+    lateinit var erpItau: ErpItau
+    @Inject
+    lateinit var bancoCentralClient: BancoCentralClient
 
     @BeforeEach
     internal fun setUp() {
@@ -195,16 +199,14 @@ internal class CadastroChavePixTest(
         )
     )
 
+    @MockBean(BancoCentralClient::class)
+    fun bcbClient() = Mockito.mock(BancoCentralClient::class.java)
+
+    @MockBean(ErpItau::class)
+    fun erpItau() = Mockito.mock(ErpItau::class.java)
+
     @Factory
     class FactoryClass{
-        @Singleton
-        @Replaces(value = ErpItau::class)
-        fun erpItau() = Mockito.mock(ErpItau::class.java)
-
-        @Singleton
-        @Replaces(value = BancoCentralClient::class)
-        fun bancoCentralClient() = Mockito.mock(BancoCentralClient::class.java)
-
         @Singleton
         fun grpc(@GrpcChannel(GrpcServerChannel.NAME) channel: ManagedChannel): KeyManagerGRPCServiceGrpc.KeyManagerGRPCServiceBlockingStub? {
             return KeyManagerGRPCServiceGrpc.newBlockingStub(channel)

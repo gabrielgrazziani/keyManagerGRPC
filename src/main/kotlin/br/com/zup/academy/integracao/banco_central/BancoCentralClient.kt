@@ -5,10 +5,7 @@ import br.com.zup.academy.pix.TitularResponse
 import br.com.zup.academy.pix.cadastro.ChavePixForm
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
-import io.micronaut.http.annotation.Body
-import io.micronaut.http.annotation.Consumes
-import io.micronaut.http.annotation.Post
-import io.micronaut.http.annotation.Produces
+import io.micronaut.http.annotation.*
 import io.micronaut.http.client.annotation.Client
 
 
@@ -20,7 +17,17 @@ interface BancoCentralClient{
     @Produces(MediaType.APPLICATION_XML)
     fun cria(@Body createPixKeyRequest: CreatePixKeyRequest): HttpResponse<CreatePixKeyResponse>
 
+    @Delete("pix/keys")
+    @Consumes(MediaType.APPLICATION_XML)
+    @Produces(MediaType.APPLICATION_XML)
+    fun deleta(key: String ,@Body deletePixKey: DeletePixKeyRequest = DeletePixKeyRequest(key = key)): HttpResponse<Any>
+
 }
+
+data class DeletePixKeyRequest(
+    val key: String,
+    val participant: String = "60701190"
+)
 
 data class CreatePixKeyRequest(
     val keyType: keyType,
