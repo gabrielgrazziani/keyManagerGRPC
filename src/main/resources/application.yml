@@ -10,4 +10,5 @@ datasources:
     dialect: POSTGRES
 jpa.default.properties.hibernate.hbm2ddl.auto: update
 
-endereco_erp_itau: ${ERP_ITAU:`http://localhost:9091/api/v1/`}
+endereco_erp_itau: ${ERP_ITAU:`http://localhost:9091/api/v1`}
+endereco_banco_central: ${BANCO_CENTRAL:`http://localhost:8082/api/v1`}

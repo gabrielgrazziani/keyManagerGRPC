@@ -1,7 +1,7 @@
 package br.com.zup.academy.pix
 
+import br.com.zup.academy.integracao.banco_central.keyType
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CPFValidator
-import java.util.*
 
 enum class TipoChave {
     CPF {
@@ -17,7 +17,8 @@ enum class TipoChave {
                 return ErroNaValidacao(true, "Não e um CPF valido ou esta mal formatado")
             }
         }
-        override fun transformar(chave: String) = chave
+
+        override fun paraKeyType() = keyType.CPF
     },
     TELEFONE_CELULAR {
         override fun validarFormatoChave(chave: String) =
@@ -27,7 +28,7 @@ enum class TipoChave {
                 ErroNaValidacao(true, "Não e um Telefone valido")
             }
 
-        override fun transformar(chave: String) = chave
+        override fun paraKeyType() = keyType.PHONE
     },
     EMAIL {
         override fun validarFormatoChave(chave: String): ErroNaValidacao {
@@ -37,7 +38,7 @@ enum class TipoChave {
                 ErroNaValidacao(true, "Não e um Email valido")
             }
         }
-        override fun transformar(chave: String) = chave
+        override fun paraKeyType() = keyType.EMAIL
     },
     CHAVE_ALEATORIA {
         override fun validarFormatoChave(chave: String) =
@@ -47,9 +48,9 @@ enum class TipoChave {
                 ErroNaValidacao(true, "Para criar uma chave aleatoria o campo 'chave' deve estar em branco")
             }
 
-        override fun transformar(chave: String) = UUID.randomUUID().toString()
+        override fun paraKeyType() = keyType.RANDOM
     };
 
-    abstract fun transformar(chave: String): String;
     abstract fun validarFormatoChave(chave: String): ErroNaValidacao
+    abstract fun paraKeyType(): keyType
 }

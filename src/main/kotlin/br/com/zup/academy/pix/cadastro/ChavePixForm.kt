@@ -20,12 +20,12 @@ data class ChavePixForm(
     val chave: String? = ""
 ){
 
-    fun paraChavePix(): ChavePix {
+    fun paraChavePix(chave: String): ChavePix {
         return ChavePix(
             idTitular = idTitular!!.toUUID(),
             tipoChave = tipoChave!!,
             tipoConta = tipoConta!!,
-            chave = tipoChave.transformar(chave!!)
+            chave = chave
         )
     }
 }

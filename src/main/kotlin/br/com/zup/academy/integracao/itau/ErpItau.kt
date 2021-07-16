@@ -11,7 +11,29 @@ import java.util.*
 interface ErpItau {
 
     @Get("/clientes/{clienteId}/contas")
-    fun buscarConta(@PathVariable clienteId: UUID,@QueryValue tipo: String): HttpResponse<BuscarContaResponse>
+    fun buscarConta(@PathVariable clienteId: UUID,@QueryValue tipo: String): HttpResponse<DadosDaContaResponse>
 }
 
-class BuscarContaResponse
+data class DadosDaContaResponse(
+    val tipo: String,
+    val agencia: String,
+    val numero: String,
+    val instituicao: InstituicaoResponse,
+    val titular: TitularResponse
+)
+
+data class DeletePixKeyRequest(
+    val key: String,
+    val participant: String = "60701190"
+)
+
+data class InstituicaoResponse(
+    val nome: String,
+    val ispb: String
+)
+
+data class TitularResponse(
+    val id: String,
+    val nome: String,
+    val cpf: String
+)

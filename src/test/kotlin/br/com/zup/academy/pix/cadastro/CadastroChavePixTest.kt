@@ -2,6 +2,9 @@ package br.com.zup.academy.pix.cadastro
 
 import br.com.zup.academy.ChavePixRequest
 import br.com.zup.academy.KeyManagerGRPCServiceGrpc
+import br.com.zup.academy.integracao.banco_central.BancoCentralClient
+import br.com.zup.academy.integracao.banco_central.CreatePixKeyRequest
+import br.com.zup.academy.integracao.banco_central.CreatePixKeyResponse
 import br.com.zup.academy.pix.*
 import br.com.zup.academy.util.getViolacao
 import io.grpc.ManagedChannel
@@ -18,12 +21,14 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito
+import java.util.*
 import javax.inject.Singleton
 
 @MicronautTest(transactional = false)
 internal class CadastroChavePixTest(
     val repository: ChavePixRepository,
     val erpItau: ErpItau,
+    val bancoCentralClient: BancoCentralClient,
     val grpcService: KeyManagerGRPCServiceGrpc.KeyManagerGRPCServiceBlockingStub
 ) {
 
@@ -34,22 +39,28 @@ internal class CadastroChavePixTest(
 
     @Test
     internal fun `deve cadastrar um chave do tipo EMAIL`() {
-        val email = "gabriel.barbosa@zup.com.br"
-        val idTitular = "18e39430-e4a9-11eb-ba80-0242ac130004"
-        Mockito.`when`(erpItau.buscarConta(idTitular.toUUID(),"CONTA_POUPANCA"))
-            .thenReturn(HttpResponse.ok(BuscarContaResponse()))
+        val chavePixForm = ChavePixForm(
+            idTitular = UUID.randomUUID().toString(),
+            tipoChave = TipoChave.EMAIL,
+            tipoConta = TipoConta.CONTA_POUPANCA,
+            chave = "gabriel.barbosa@zup.com.br"
+        )
+        Mockito.`when`(erpItau.buscarConta(chavePixForm.idTitular!!.toUUID(),"CONTA_POUPANCA"))
+            .thenReturn(HttpResponse.ok(DADOS_DA_CONTA_RESPONSE))
+        Mockito.`when`(bancoCentralClient.cria(CreatePixKeyRequest(DADOS_DA_CONTA_RESPONSE, chavePixForm)))
+            .thenReturn(HttpResponse.ok(CreatePixKeyResponse(key = chavePixForm.chave!!)))
 
         val response = grpcService.cadastro(ChavePixRequest.newBuilder()
-            .setChave(email)
+            .setChave(chavePixForm.chave)
             .setTipoChave(ChavePixRequest.TipoChave.EMAIL)
             .setTipoConta(ChavePixRequest.TipoConta.CONTA_POUPANCA)
-            .setIdTitular(idTitular)
+            .setIdTitular(chavePixForm.idTitular)
             .build())
 
         assertNotEquals("",response.id)
         val chave = repository.findByUuid(response.id.toUUID())
         assertNotNull(chave)
-        assertEquals(email,chave!!.chave)
+        assertEquals(chavePixForm.chave,chave!!.chave)
     }
 
     @Test
@@ -77,14 +88,20 @@ internal class CadastroChavePixTest(
 
     @Test
     internal fun `deve cadastrar um chave do tipo CHAVE_ALEATORIA`() {
-        val idTitular = "18e39430-e4a9-11eb-ba80-0242ac130004"
-        Mockito.`when`(erpItau.buscarConta(idTitular.toUUID(),"CONTA_POUPANCA"))
-            .thenReturn(HttpResponse.ok(BuscarContaResponse()))
+        val chavePixForm = ChavePixForm(
+            idTitular = UUID.randomUUID().toString(),
+            tipoChave = TipoChave.CHAVE_ALEATORIA,
+            tipoConta = TipoConta.CONTA_POUPANCA,
+        )
+        Mockito.`when`(erpItau.buscarConta(chavePixForm.idTitular!!.toUUID(),"CONTA_POUPANCA"))
+            .thenReturn(HttpResponse.ok(DADOS_DA_CONTA_RESPONSE))
+        Mockito.`when`(bancoCentralClient.cria(CreatePixKeyRequest(DADOS_DA_CONTA_RESPONSE, chavePixForm)))
+            .thenReturn(HttpResponse.ok(CreatePixKeyResponse(key = UUID.randomUUID().toString())))
 
         val response = grpcService.cadastro(ChavePixRequest.newBuilder()
             .setTipoChave(ChavePixRequest.TipoChave.CHAVE_ALEATORIA)
             .setTipoConta(ChavePixRequest.TipoConta.CONTA_POUPANCA)
-            .setIdTitular(idTitular)
+            .setIdTitular(chavePixForm.idTitular)
             .build())
 
         val chave = repository.findByUuid(response.id.toUUID())
@@ -163,11 +180,30 @@ internal class CadastroChavePixTest(
         assertEquals(0,repository.count())
     }
 
+    val DADOS_DA_CONTA_RESPONSE = DadosDaContaResponse(
+        tipo = "CONTA_CORRENTE",
+        agencia = "0001",
+        numero = "291900",
+        instituicao = InstituicaoResponse(
+            nome = "ITAÚ UNIBANCO S.A.",
+            ispb = "60701190"
+        ),
+        titular = TitularResponse(
+            id = UUID.randomUUID().toString(),
+            nome = "Gabriel Grazziani",
+            cpf = "111.222.333-44"
+        )
+    )
+
     @Factory
     class FactoryClass{
         @Singleton
         @Replaces(value = ErpItau::class)
         fun erpItau() = Mockito.mock(ErpItau::class.java)
+
+        @Singleton
+        @Replaces(value = BancoCentralClient::class)
+        fun bancoCentralClient() = Mockito.mock(BancoCentralClient::class.java)
 
         @Singleton
         fun grpc(@GrpcChannel(GrpcServerChannel.NAME) channel: ManagedChannel): KeyManagerGRPCServiceGrpc.KeyManagerGRPCServiceBlockingStub? {
