@@ -185,15 +185,9 @@ internal class CadastroChavePixTest(
     }
 
     val DADOS_DA_CONTA_RESPONSE = DadosDaContaResponse(
-        tipo = "CONTA_CORRENTE",
         agencia = "0001",
         numero = "291900",
-        instituicao = InstituicaoResponse(
-            nome = "ITAÚ UNIBANCO S.A.",
-            ispb = "60701190"
-        ),
         titular = TitularResponse(
-            id = UUID.randomUUID().toString(),
             nome = "Gabriel Grazziani",
             cpf = "111.222.333-44"
         )

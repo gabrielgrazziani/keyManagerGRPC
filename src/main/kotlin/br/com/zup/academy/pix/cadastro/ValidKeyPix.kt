@@ -22,7 +22,7 @@ annotation class ValidKeyPix(
 @Singleton
 class ValidPixKeyValidator: javax.validation.ConstraintValidator<ValidKeyPix, ChavePixForm> {
 
-    override fun isValid(value: ChavePixForm, context: javax.validation.ConstraintValidatorContext): Boolean {
+    override fun isValid(value: ChavePixForm, context: javax.validation.ConstraintValidatorContext?): Boolean {
 
         if (value.tipoChave == null || value.chave == null) {
             return true
@@ -31,10 +31,10 @@ class ValidPixKeyValidator: javax.validation.ConstraintValidator<ValidKeyPix, Ch
         val erro = value.tipoChave.validarFormatoChave(value.chave)
 
         if(erro.posuiErro){
-            context.disableDefaultConstraintViolation()
+            context?.disableDefaultConstraintViolation()
             context
-                .buildConstraintViolationWithTemplate(erro.menssagem)
-                .addConstraintViolation()
+                ?.buildConstraintViolationWithTemplate(erro.menssagem)
+                ?.addConstraintViolation()
             return false
         }
         return true
