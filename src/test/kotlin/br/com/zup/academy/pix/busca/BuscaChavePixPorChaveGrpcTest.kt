@@ -23,7 +23,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @MicronautTest(transactional = false)
-internal class BuscaChavePixGrpcTest(
+internal class BuscaChavePixPorChaveGrpcTest(
     val grpc: KeymanagerBuscaGrpcServiceGrpc.KeymanagerBuscaGrpcServiceBlockingStub,
     val repository: ChavePixRepository
 ){
@@ -94,7 +94,7 @@ internal class BuscaChavePixGrpcTest(
     }
 
     @Test
-    internal fun `nao deve encontrar um cahve pix`() {
+    internal fun `nao deve encontrar um chave pix`() {
         Mockito.`when`(bancoCentral.busca(CHAVE_PIX.chave))
             .thenReturn(HttpResponse.notFound())
 
@@ -128,6 +128,8 @@ internal class BuscaChavePixGrpcTest(
         assertEquals(CHAVE_PIX.conta.agencia,response.chave.conta.agencia,"agencia")
         assertEquals(CHAVE_PIX.conta.numeroDaConta,response.chave.conta.numeroDaConta,"numero da conta")
     }
+
+
 
     @MockBean(BancoCentralClient::class)
     fun bcb() = Mockito.mock(BancoCentralClient::class.java)

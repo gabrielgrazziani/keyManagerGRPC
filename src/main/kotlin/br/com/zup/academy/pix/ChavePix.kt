@@ -22,6 +22,8 @@ class ChavePix(
         criadoEm = LocalDateTime.now()
     }
 
+    fun pertense(idTitular: UUID) = this.idTitular == idTitular
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null

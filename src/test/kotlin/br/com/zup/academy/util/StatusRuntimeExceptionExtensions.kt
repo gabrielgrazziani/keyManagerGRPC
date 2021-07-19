@@ -9,3 +9,13 @@ fun StatusRuntimeException.getViolacao(index: Int): BadRequest.FieldViolation? {
     val badRequest = statusProto?.detailsList?.get(0)?.unpack(BadRequest::class.java)
     return badRequest?.getFieldViolations(index);
 }
+
+fun StatusRuntimeException.getViolacaons(): List<Pair<String, String>> {
+    val statusProto = StatusProto.fromThrowable(this)
+    val badRequest = statusProto
+        ?.detailsList!!.get(0)
+        .unpack(BadRequest::class.java)
+    return badRequest.fieldViolationsList.map {
+        it.field to it.description
+    }
+}
