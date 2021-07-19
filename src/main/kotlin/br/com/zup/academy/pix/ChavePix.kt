@@ -16,7 +16,11 @@ class ChavePix(
     @Embedded
     val conta: ContaAssociada
 ) {
-    val criadoEm = LocalDateTime.now()
+    val criadoEm: LocalDateTime
+
+    init {
+        criadoEm = LocalDateTime.now()
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

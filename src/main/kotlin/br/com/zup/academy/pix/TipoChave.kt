@@ -1,6 +1,5 @@
 package br.com.zup.academy.pix
 
-import br.com.zup.academy.integracao.banco_central.keyType
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CPFValidator
 
 enum class TipoChave {
@@ -17,8 +16,6 @@ enum class TipoChave {
                 return ErroNaValidacao(true, "Não e um CPF valido ou esta mal formatado")
             }
         }
-
-        override fun paraKeyType() = keyType.CPF
     },
     TELEFONE_CELULAR {
         override fun validarFormatoChave(chave: String) =
@@ -27,8 +24,6 @@ enum class TipoChave {
             } else {
                 ErroNaValidacao(true, "Não e um Telefone valido")
             }
-
-        override fun paraKeyType() = keyType.PHONE
     },
     EMAIL {
         override fun validarFormatoChave(chave: String): ErroNaValidacao {
@@ -38,7 +33,6 @@ enum class TipoChave {
                 ErroNaValidacao(true, "Não e um Email valido")
             }
         }
-        override fun paraKeyType() = keyType.EMAIL
     },
     CHAVE_ALEATORIA {
         override fun validarFormatoChave(chave: String) =
@@ -47,10 +41,7 @@ enum class TipoChave {
             } else {
                 ErroNaValidacao(true, "Para criar uma chave aleatoria o campo 'chave' deve estar em branco")
             }
-
-        override fun paraKeyType() = keyType.RANDOM
     };
 
     abstract fun validarFormatoChave(chave: String): ErroNaValidacao
-    abstract fun paraKeyType(): keyType
 }
