@@ -3,10 +3,7 @@ package br.com.zup.academy.pix.remover
 import br.com.zup.academy.KeymanagerRemoveGrpcServiceGrpc
 import br.com.zup.academy.RemoveChavePixRequest
 import br.com.zup.academy.integracao.banco_central.BancoCentralClient
-import br.com.zup.academy.pix.ChavePix
-import br.com.zup.academy.pix.ChavePixRepository
-import br.com.zup.academy.pix.TipoChave
-import br.com.zup.academy.pix.TipoConta
+import br.com.zup.academy.pix.*
 import br.com.zup.academy.util.getViolacao
 import io.grpc.ManagedChannel
 import io.grpc.Status
@@ -145,7 +142,14 @@ internal class RemoveChavePixTest(
         tipoChave = TipoChave.EMAIL,
         tipoConta = TipoConta.CONTA_POUPANCA,
         chave = "gabriel.barbosa@zup.com.br",
-        uuid = idPix
+        uuid = idPix,
+        conta = ContaAssociada(
+            nomeDoTitular = "Gabriel Grazziani",
+            cpfDoTitular = "00801087090",
+            instituicao = ContaAssociada.ITAU_UNIBANCO_ISPB,
+            numeroDaConta = "123456",
+            agencia = "0001"
+        )
     )
 
     @MockBean(BancoCentralClient::class)

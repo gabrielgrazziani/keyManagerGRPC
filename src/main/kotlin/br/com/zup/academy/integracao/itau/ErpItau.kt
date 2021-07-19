@@ -18,7 +18,17 @@ data class DadosDaContaResponse(
     val agencia: String,
     val numero: String,
     val titular: TitularResponse
-)
+) {
+    fun paraContaAssociada(): ContaAssociada {
+        return ContaAssociada(
+            agencia = agencia,
+            numeroDaConta = numero,
+            instituicao = ContaAssociada.ITAU_UNIBANCO_ISPB,
+            cpfDoTitular = titular.cpf,
+            nomeDoTitular = titular.nome
+        )
+    }
+}
 
 data class TitularResponse(
     val nome: String,

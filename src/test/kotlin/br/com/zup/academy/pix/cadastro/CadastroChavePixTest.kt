@@ -146,7 +146,14 @@ internal class CadastroChavePixTest(
             tipoChave = TipoChave.EMAIL,
             tipoConta = TipoConta.CONTA_POUPANCA,
             idTitular = idTitular.toUUID(),
-            chave = email
+            chave = email,
+            conta = ContaAssociada(
+                nomeDoTitular = "Gabriel Grazziani",
+                cpfDoTitular = "00801087090",
+                instituicao = ContaAssociada.ITAU_UNIBANCO_ISPB,
+                numeroDaConta = "123456",
+                agencia = "0001"
+            )
         ))
 
         val error = assertThrows<StatusRuntimeException> {
@@ -189,7 +196,7 @@ internal class CadastroChavePixTest(
         numero = "291900",
         titular = TitularResponse(
             nome = "Gabriel Grazziani",
-            cpf = "111.222.333-44"
+            cpf = "11122233344"
         )
     )
 

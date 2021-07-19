@@ -26,7 +26,7 @@ class CadastroChavePixService(
         val respostaBcb = bancoCentral.cria(CreatePixKeyRequest(dadosDaConta,chavePixForm))
         val key = respostaBcb.body()?.key ?: throw IllegalArgumentException("?") //TODO
 
-        val chavePix = chavePixForm.paraChavePix(key)
+        val chavePix = chavePixForm.paraChavePix(key,dadosDaConta.paraContaAssociada())
 
         return repository.save(chavePix)
     }
