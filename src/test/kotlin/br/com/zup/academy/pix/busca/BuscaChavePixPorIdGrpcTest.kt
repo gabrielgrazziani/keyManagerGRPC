@@ -2,6 +2,7 @@ package br.com.zup.academy.pix.busca
 
 import br.com.zup.academy.BuscaChavePixPorIdPixRequest
 import br.com.zup.academy.KeymanagerBuscaGrpcServiceGrpc
+import br.com.zup.academy.integracao.banco_central.*
 import br.com.zup.academy.pix.*
 import br.com.zup.academy.util.getViolacaons
 import io.grpc.ManagedChannel
@@ -10,6 +11,8 @@ import io.grpc.StatusRuntimeException
 import io.micronaut.context.annotation.Factory
 import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.grpc.server.GrpcServerChannel
+import io.micronaut.http.HttpResponse
+import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.containsInAnyOrder
@@ -17,7 +20,9 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.mockito.Mockito
 import java.util.*
+import javax.inject.Inject
 import javax.inject.Singleton
 
 @MicronautTest(transactional = false)
@@ -26,7 +31,11 @@ internal class BuscaChavePixPorIdGrpcTest(
     val repository: ChavePixRepository
 ){
 
+    @Inject
+    lateinit var bancoCentral: BancoCentralClient
+
     val CHAVE_PIX: ChavePix
+    val PIX_KEY_DETAILS_RESPONSE: PixKeyDetailsResponse
 
     init {
         CHAVE_PIX = ChavePix(
@@ -42,6 +51,22 @@ internal class BuscaChavePixPorIdGrpcTest(
                 nomeDoTitular = "Gabriel Grazziani"
             )
         )
+        PIX_KEY_DETAILS_RESPONSE = PixKeyDetailsResponse(
+            keyType = keyType.RANDOM,
+            key = CHAVE_PIX.chave,
+            createdAt = CHAVE_PIX.criadoEm,
+            bankAccount = BankAccountResponse(
+                accountNumber = CHAVE_PIX.conta.numeroDaConta,
+                accountType = AccountType.SVGS,
+                branch = CHAVE_PIX.conta.agencia,
+                participant = CHAVE_PIX.conta.instituicao
+            ),
+            owner = OwnerResponse(
+                type = "",
+                name = CHAVE_PIX.conta.nomeDoTitular,
+                taxIdNumber = CHAVE_PIX.conta.cpfDoTitular
+            )
+        )
     }
 
     @BeforeEach
@@ -51,6 +76,9 @@ internal class BuscaChavePixPorIdGrpcTest(
 
     @Test
     internal fun `deve buscar os dados de um chave pix baseado no id`() {
+        Mockito.`when`(bancoCentral.busca(CHAVE_PIX.chave))
+            .thenReturn(HttpResponse.ok(PIX_KEY_DETAILS_RESPONSE))
+
         repository.save(CHAVE_PIX)
 
         val response = grpc.buscaPorIdPix(BuscaChavePixPorIdPixRequest.newBuilder()
@@ -85,7 +113,22 @@ internal class BuscaChavePixPorIdGrpcTest(
     }
 
     @Test
+    internal fun `nao deve encontrar um chave pix se nao encontrar no BCB`() {
+        val error = assertThrows<StatusRuntimeException> {
+            grpc.buscaPorIdPix(BuscaChavePixPorIdPixRequest.newBuilder()
+                .setIdPix(CHAVE_PIX.uuid.toString())
+                .setIdTitular(CHAVE_PIX.idTitular.toString())
+                .build())
+        }
+
+        assertEquals(Status.NOT_FOUND.code,error.status.code)
+        assertEquals("Chave Pix não encontrada",error.status.description)
+    }
+
+    @Test
     internal fun `nao deve buscar os dados quando o titular nao for dono da chave`() {
+        Mockito.`when`(bancoCentral.busca(CHAVE_PIX.chave))
+            .thenReturn(HttpResponse.notFound())
         repository.save(CHAVE_PIX)
 
         val error = assertThrows<StatusRuntimeException> {
@@ -115,6 +158,9 @@ internal class BuscaChavePixPorIdGrpcTest(
             "idTitular" to "UUID invalido"
         ))
     }
+
+    @MockBean(BancoCentralClient::class)
+    fun bcb() = Mockito.mock(BancoCentralClient::class.java)
 
     @Factory
     class BuscaGrpcServiceGrpcFactory{
