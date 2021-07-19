@@ -92,7 +92,7 @@ internal class BuscaChavePixPorIdGrpcTest(
         assertEquals(CHAVE_PIX.tipoChave.name,response.chave.tipo.name,"tipo chave")
         assertEquals(CHAVE_PIX.criadoEm.paraTimestamp().seconds,response.chave.criadaEm.seconds,"criadaEm")
         assertEquals(CHAVE_PIX.tipoConta.name,response.chave.conta.tipo.name,"tipo conta")
-        assertEquals(CHAVE_PIX.conta.instituicao,response.chave.conta.instituicao,"instituicao")
+        assertEquals("ITAÚ UNIBANCO S.A.",response.chave.conta.instituicao,"instituicao")
         assertEquals(CHAVE_PIX.conta.nomeDoTitular,response.chave.conta.nomeDoTitular,"nome do titular")
         assertEquals(CHAVE_PIX.conta.cpfDoTitular,response.chave.conta.cpfDoTitular,"cpf")
         assertEquals(CHAVE_PIX.conta.agencia,response.chave.conta.agencia,"agencia")

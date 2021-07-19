@@ -4,6 +4,7 @@ import br.com.zup.academy.BuscaChavePixResponse
 import br.com.zup.academy.integracao.banco_central.PixKeyDetailsResponse
 import br.com.zup.academy.integracao.banco_central.keyType
 import br.com.zup.academy.pix.ChavePix
+import br.com.zup.academy.pix.Instituicoes
 import br.com.zup.academy.pix.TipoChave
 import br.com.zup.academy.pix.paraTipoChave
 import com.google.protobuf.Timestamp
@@ -20,7 +21,7 @@ fun ChavePix.paraBuscaChavePixResponse(): BuscaChavePixResponse {
                 .setTipo(BuscaChavePixResponse.TipoConta.valueOf(this.tipoConta.name))
                 .setAgencia(this.conta.agencia)
                 .setNumeroDaConta(this.conta.numeroDaConta)
-                .setInstituicao(this.conta.instituicao)
+                .setInstituicao(Instituicoes.nome(this.conta.instituicao))
                 .setCpfDoTitular(this.conta.cpfDoTitular)
                 .setNomeDoTitular(this.conta.nomeDoTitular)
                 .build()
@@ -41,7 +42,7 @@ fun PixKeyDetailsResponse.paraBuscaChavePixResponse(): BuscaChavePixResponse {
                 .setTipo(BuscaChavePixResponse.TipoConta.valueOf(this.bankAccount.accountType.paraTipoChave()!!.name))
                 .setAgencia(this.bankAccount.branch)
                 .setNumeroDaConta(this.bankAccount.accountNumber)
-                .setInstituicao(this.bankAccount.participant)
+                .setInstituicao(Instituicoes.nome(this.bankAccount.participant))
                 .setCpfDoTitular(this.owner.taxIdNumber)
                 .setNomeDoTitular(this.owner.name)
                 .build()
