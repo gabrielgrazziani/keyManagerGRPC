@@ -1,5 +1,6 @@
 package br.com.zup.academy.pix
 
+import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
 import javax.validation.Valid
@@ -15,6 +16,7 @@ class ChavePix(
     @Embedded
     val conta: ContaAssociada
 ) {
+    val criadoEm = LocalDateTime.now()
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
