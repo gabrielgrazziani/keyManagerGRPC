@@ -15,4 +15,8 @@ private object MaperAccountTypeBcb {
 }
 
 fun TipoConta.paraAccountType() = MaperAccountTypeBcb.tipoContaParaAccountType.get(this)
-fun AccountType.paraTipoChave() = MaperAccountTypeBcb.accountTypeParaTipoConta.get(this)
+fun AccountType.paraMeuEnum() = MaperAccountTypeBcb.accountTypeParaTipoConta.get(this)
+
+fun AccountType.paraEnumGrpc(): br.com.zup.academy.TipoConta {
+    return br.com.zup.academy.TipoConta.valueOf(this.paraMeuEnum()!!.name)
+}

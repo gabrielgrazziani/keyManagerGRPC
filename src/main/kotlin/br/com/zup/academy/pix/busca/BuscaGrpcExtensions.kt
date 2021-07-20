@@ -2,11 +2,9 @@ package br.com.zup.academy.pix.busca
 
 import br.com.zup.academy.BuscaChavePixResponse
 import br.com.zup.academy.integracao.banco_central.PixKeyDetailsResponse
-import br.com.zup.academy.integracao.banco_central.keyType
 import br.com.zup.academy.pix.ChavePix
 import br.com.zup.academy.pix.Instituicoes
-import br.com.zup.academy.pix.TipoChave
-import br.com.zup.academy.pix.paraTipoChave
+import br.com.zup.academy.pix.paraEnumGrpc
 import com.google.protobuf.Timestamp
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -15,10 +13,10 @@ fun ChavePix.paraBuscaChavePixResponse(): BuscaChavePixResponse {
     return BuscaChavePixResponse.newBuilder()
         .setChave(BuscaChavePixResponse.ChavePix.newBuilder()
             .setChave(this.chave)
-            .setTipo(this.tipoChave.paraTipoChave())
+            .setTipo(this.tipoChave.paraEnumGrpc())
             .setCriadaEm(this.criadoEm.paraTimestamp())
             .setConta(BuscaChavePixResponse.ContaInfo.newBuilder()
-                .setTipo(BuscaChavePixResponse.TipoConta.valueOf(this.tipoConta.name))
+                .setTipo(this.tipoConta.paraEnumGrpc())
                 .setAgencia(this.conta.agencia)
                 .setNumeroDaConta(this.conta.numeroDaConta)
                 .setInstituicao(Instituicoes.nome(this.conta.instituicao))
@@ -36,10 +34,10 @@ fun PixKeyDetailsResponse.paraBuscaChavePixResponse(): BuscaChavePixResponse {
     return BuscaChavePixResponse.newBuilder()
         .setChave(BuscaChavePixResponse.ChavePix.newBuilder()
             .setChave(this.key)
-            .setTipo(this.keyType.paraTipoChave()!!.paraTipoChave())
+            .setTipo(this.keyType.paraEnumGrpc())
             .setCriadaEm(this.createdAt.paraTimestamp())
             .setConta(BuscaChavePixResponse.ContaInfo.newBuilder()
-                .setTipo(BuscaChavePixResponse.TipoConta.valueOf(this.bankAccount.accountType.paraTipoChave()!!.name))
+                .setTipo(this.bankAccount.accountType.paraEnumGrpc())
                 .setAgencia(this.bankAccount.branch)
                 .setNumeroDaConta(this.bankAccount.accountNumber)
                 .setInstituicao(Instituicoes.nome(this.bankAccount.participant))
@@ -49,14 +47,6 @@ fun PixKeyDetailsResponse.paraBuscaChavePixResponse(): BuscaChavePixResponse {
             )
             .build())
         .build()
-}
-
-fun keyType.paraTipoChave(): BuscaChavePixResponse.TipoChave{
-    return BuscaChavePixResponse.TipoChave.valueOf(this.name)
-}
-
-fun TipoChave.paraTipoChave(): BuscaChavePixResponse.TipoChave{
-    return BuscaChavePixResponse.TipoChave.valueOf(this.name)
 }
 
 fun LocalDateTime.paraTimestamp(): Timestamp {

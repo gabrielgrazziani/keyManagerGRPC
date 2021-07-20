@@ -56,8 +56,8 @@ internal class CadastroChavePixTest(
 
         val response = grpcService.cadastro(ChavePixRequest.newBuilder()
             .setChave(chavePixForm.chave)
-            .setTipoChave(ChavePixRequest.TipoChave.EMAIL)
-            .setTipoConta(ChavePixRequest.TipoConta.CONTA_POUPANCA)
+            .setTipoChave(br.com.zup.academy.TipoChave.EMAIL)
+            .setTipoConta(br.com.zup.academy.TipoConta.CONTA_POUPANCA)
             .setIdTitular(chavePixForm.idTitular)
             .build())
 
@@ -78,8 +78,8 @@ internal class CadastroChavePixTest(
         val error = assertThrows<StatusRuntimeException> {
             grpcService.cadastro(ChavePixRequest.newBuilder()
                 .setChave(email)
-                .setTipoChave(ChavePixRequest.TipoChave.EMAIL)
-                .setTipoConta(ChavePixRequest.TipoConta.CONTA_POUPANCA)
+                .setTipoChave(br.com.zup.academy.TipoChave.EMAIL)
+                .setTipoConta(br.com.zup.academy.TipoConta.CONTA_POUPANCA)
                 .setIdTitular(idTitular)
                 .build())
         }
@@ -103,8 +103,8 @@ internal class CadastroChavePixTest(
             .thenReturn(HttpResponse.ok(CreatePixKeyResponse(key = UUID.randomUUID().toString())))
 
         val response = grpcService.cadastro(ChavePixRequest.newBuilder()
-            .setTipoChave(ChavePixRequest.TipoChave.CHAVE_ALEATORIA)
-            .setTipoConta(ChavePixRequest.TipoConta.CONTA_POUPANCA)
+            .setTipoChave(br.com.zup.academy.TipoChave.CHAVE_ALEATORIA)
+            .setTipoConta(br.com.zup.academy.TipoConta.CONTA_POUPANCA)
             .setIdTitular(chavePixForm.idTitular)
             .build())
 
@@ -124,8 +124,8 @@ internal class CadastroChavePixTest(
         val error = assertThrows<StatusRuntimeException> {
             grpcService.cadastro(ChavePixRequest.newBuilder()
                 .setChave("teste")
-                .setTipoChave(ChavePixRequest.TipoChave.CHAVE_ALEATORIA)
-                .setTipoConta(ChavePixRequest.TipoConta.CONTA_POUPANCA)
+                .setTipoChave(br.com.zup.academy.TipoChave.CHAVE_ALEATORIA)
+                .setTipoConta(br.com.zup.academy.TipoConta.CONTA_POUPANCA)
                 .setIdTitular(idTitular)
                 .build())
         }
@@ -159,8 +159,8 @@ internal class CadastroChavePixTest(
         val error = assertThrows<StatusRuntimeException> {
             grpcService.cadastro(ChavePixRequest.newBuilder()
                 .setChave(email)
-                .setTipoChave(ChavePixRequest.TipoChave.EMAIL)
-                .setTipoConta(ChavePixRequest.TipoConta.CONTA_POUPANCA)
+                .setTipoChave(br.com.zup.academy.TipoChave.EMAIL)
+                .setTipoConta(br.com.zup.academy.TipoConta.CONTA_POUPANCA)
                 .setIdTitular(idTitular)
                 .build())
         }
@@ -180,8 +180,8 @@ internal class CadastroChavePixTest(
         val error = assertThrows<StatusRuntimeException> {
             grpcService.cadastro(ChavePixRequest.newBuilder()
                 .setChave(email)
-                .setTipoChave(ChavePixRequest.TipoChave.EMAIL)
-                .setTipoConta(ChavePixRequest.TipoConta.CONTA_CORRENTE)
+                .setTipoChave(br.com.zup.academy.TipoChave.EMAIL)
+                .setTipoConta(br.com.zup.academy.TipoConta.CONTA_CORRENTE)
                 .setIdTitular(idTitular)
                 .build())
         }

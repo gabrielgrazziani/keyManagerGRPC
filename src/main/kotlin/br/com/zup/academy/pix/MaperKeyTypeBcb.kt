@@ -19,4 +19,8 @@ private object MaperKeyTypeBcb {
 }
 
 fun TipoChave.paraKeyType() = MaperKeyTypeBcb.tipoChaveParakeyType.get(this)
-fun keyType.paraTipoChave() = MaperKeyTypeBcb.keyTypeParaTipoChave.get(this)
+fun keyType.paraMeuEnum() = MaperKeyTypeBcb.keyTypeParaTipoChave.get(this)
+
+fun keyType.paraEnumGrpc(): br.com.zup.academy.TipoChave {
+    return br.com.zup.academy.TipoChave.valueOf(this.paraMeuEnum()!!.name)
+}
