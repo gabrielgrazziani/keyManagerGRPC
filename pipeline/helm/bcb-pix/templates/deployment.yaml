@@ -39,11 +39,11 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
+              path: /swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config#/
               port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: /swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config#/
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
