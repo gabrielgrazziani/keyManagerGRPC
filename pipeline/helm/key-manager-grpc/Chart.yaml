@@ -1,6 +1,6 @@
 apiVersion: v2
 name: key-manager-grpc
-description: A Helm chart for Kubernetes
+description: key-manager-grpc Gabriel Grazziani
 
 # A chart can be either an 'application' or a 'library' chart.
 #
