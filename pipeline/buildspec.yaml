@@ -15,7 +15,7 @@ phases:
     commands:
       - echo connecting ecr
       - docker login -u AWS -p $(aws ecr-public get-login-password --region us-east-1) public.ecr.aws/i2c7a5l2/ot5-gabrielgrazziani/key-manager-grpc
-      - sh gradlew build
+      - sh gradlew build --warning-mode=all
       - echo exporting kubeconfig
       - export KUBECONFIG=$HOME/.kube/config
 
