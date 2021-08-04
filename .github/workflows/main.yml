@@ -7,7 +7,7 @@ jobs:
   to_codecommit:
     runs-on: ubuntu-18.04
     steps:
-      - user: actions/checkout@@v1
+      - user: actions/checkout@v1
       - user: spyoungtech/mirror-action@master
         with:
           REMOTE: ${{ secrets.GIT_REMOTE }}
