@@ -1,4 +1,4 @@
-FROM openjdk:16
+FROM openjdk:14
 EXPOSE 50051
 
 ARG JAR_FILE=build/libs/*-all.jar
