@@ -35,5 +35,5 @@ phases:
       - echo deploying to cluster...
       - helm version --short
       - helm lint pipeline/helm/key-manager-grpc --values pipeline/helm/key-manager-grpc/values.yaml -n gabriel
-      - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --role-arn arn:aws:iam::208471844409:role/CodeBuildKubectlRole
+      - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --role-arn arn:aws:iam::208471844409:role/EksWorkshopCodeBuildKubectlRole
       - helm upgrade -i key-manager-grpc pipeline/helm/key-manager-grpc/ --values pipeline/helm/key-manager-grpc/values.yaml -n gabriel
