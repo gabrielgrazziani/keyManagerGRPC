@@ -13,27 +13,19 @@ phases:
 
   pre_build:
     commands:
-      - echo connecting ecr
-      - docker login -u AWS -p $(aws ecr-public get-login-password --region us-east-1) public.ecr.aws/i2c7a5l2/ot5-gabrielgrazziani/key-manager-grpc
-      - sh gradlew build --warning-mode=all
-      - echo exporting kubeconfig
+      - sh gradlew build
       - export KUBECONFIG=$HOME/.kube/config
 
   build:
     commands:
-      - echo Build started on `date`
-      - echo Building the Docker image...
+      - docker login --username $DOCKERHUB_USERNAME --password $DOCKERHUB_PASSWORD
       - docker build -t key-manager-grpc .
       - docker tag key-manager-grpc:latest public.ecr.aws/i2c7a5l2/ot5-gabrielgrazziani/key-manager-grpc:latest
-      - echo Build completed on `date`
 
   post_build:
     commands:
-      - echo Pushing in to Amazon ECR...
+      - docker login -u AWS -p $(aws ecr-public get-login-password --region us-east-1) public.ecr.aws/i2c7a5l2/ot5-gabrielgrazziani/key-manager-grpc
       - docker push public.ecr.aws/i2c7a5l2/ot5-gabrielgrazziani/key-manager-grpc:latest
-      - echo Push completed on `date`
-      - echo deploying to cluster...
-      - helm version --short
       - helm lint pipeline/helm/key-manager-grpc --values pipeline/helm/key-manager-grpc/values.yaml -n gabriel
       - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --role-arn arn:aws:iam::208471844409:role/EksWorkshopCodeBuildKubectlRole
       - helm upgrade -i key-manager-grpc pipeline/helm/key-manager-grpc/ --values pipeline/helm/key-manager-grpc/values.yaml -n gabriel
