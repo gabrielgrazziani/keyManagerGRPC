@@ -166,7 +166,7 @@ internal class CadastroChavePixTest(
         }
 
         assertEquals(Status.ALREADY_EXISTS.code,error.status.code)
-        assertEquals("ALREADY_EXISTS: ja existe uma chave com este valor",error.message)
+        assertEquals("ja existe uma chave com este valor!",error.status.description)
         assertEquals(1,repository.count())
     }
 
