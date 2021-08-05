@@ -18,7 +18,7 @@ class CadastroChavePixService(
     fun cadastro(@Valid chavePixForm: ChavePixForm): ChavePix {
 
         if (repository.existsByChave(chavePixForm.chave!!)) // 1
-            throw ChavePixExistenteException("ja existe uma chave com este valor")
+            throw ChavePixExistenteException("ja existe uma chave com este valor!")
 
         val respostaItau = erpItau.buscarConta(chavePixForm.idTitular!!.toUUID(), chavePixForm.tipoConta!!.name)
         val dadosDaConta = respostaItau.body() ?: throw IllegalArgumentException("idTitilar e/ou tipoConta esta incorreto")
