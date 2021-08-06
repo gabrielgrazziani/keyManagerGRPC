@@ -69,7 +69,7 @@ internal class RemoveChavePixTest(
         }
 
         assertEquals(Status.NOT_FOUND.code,error.status.code)
-        assertTrue(error.message!!.endsWith("Chave não encontrada"))
+        assertEquals("Chave não encontrada!",error.status.description)
     }
 
     @Test

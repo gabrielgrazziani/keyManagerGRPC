@@ -21,7 +21,7 @@ class RemoveChavePixService(
         val chavePix = repository.findByUuid(removeChavePixForm.idPix!!.toUUID())
 
         if(chavePix == null){
-            throw ChavePixNaoEncontradaException("Chave não encontrada")
+            throw ChavePixNaoEncontradaException("Chave não encontrada!")
         }
 
         if(chavePix.idTitular != removeChavePixForm.idTitular?.toUUID()){
